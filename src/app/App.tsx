@@ -35,7 +35,7 @@ function Reveal({ children, delay = 0, className = "" }: { children: React.React
 
 function SectionLabel({ text }: { text: string }) {
   return (
-    <span style={{ color: C.accent, letterSpacing: "0.2em", fontSize: 20, fontWeight: 700, fontFamily: "'Inter', sans-serif" }} className="uppercase">
+    <span style={{ color: C.accent, letterSpacing: "0.2em", fontSize: 24, fontWeight: 700, fontFamily: "'Inter', sans-serif" }} className="uppercase">
       {text}
     </span>
   );
@@ -177,6 +177,14 @@ function Hero() {
           {/* Left */}
           <div>
             <motion.div initial={{ opacity: 0, y: 32 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.7, delay: 0.2 }}>
+              <div style={{ display: "flex", flexDirection: "column", gap: 10, marginBottom: 12 }}>
+                <div style={{ fontSize: "clamp(24px, 3vw, 36px)", color: C.accent, fontWeight: 800, letterSpacing: "0.14em", fontFamily: "'Inter', sans-serif", textTransform: "uppercase" }}>
+                  翁佳欣
+                </div>
+                <div style={{ fontSize: 14, color: C.muted, fontWeight: 600, letterSpacing: "0.18em", fontFamily: "'Inter', sans-serif", textTransform: "uppercase" }}>
+                  产品设计 · 用户体验 · AI 原型
+                </div>
+              </div>
               <SectionLabel text="UI/UX设计师 | 产品实习生" />
             </motion.div>
 
@@ -186,7 +194,7 @@ function Hero() {
               transition={{ duration: 0.7, delay: 0.35 }}
               style={{
                 fontFamily: "'Noto Sans SC', 'Inter', sans-serif",
-                fontSize: "clamp(46px, 6.2vw, 78px)",
+                fontSize: "clamp(38px, 5.5vw, 68px)",
                 fontWeight: 700,
                 lineHeight: 1.08,
                 letterSpacing: "-0.02em",
@@ -474,27 +482,27 @@ function ProjectCard({ project, large }: { project: Project; large?: boolean }) 
   return (
     <div
       style={{
-        background: "rgba(255,255,255,0.62)",
-        backdropFilter: "blur(18px)",
-        WebkitBackdropFilter: "blur(18px)",
+        background: "rgba(255, 255, 255, 0.12)",
+        backdropFilter: "blur(24px)",
+        WebkitBackdropFilter: "blur(24px)",
         borderRadius: 28,
         overflow: "hidden",
-        border: `1px solid rgba(255,255,255,0.7)`,
-        boxShadow: "0 24px 70px rgba(15,23,42,0.12)",
+        border: `1px solid rgba(255,255,255,0.45)`,
+        boxShadow: "0 28px 90px rgba(15,23,42,0.16)",
         transition: "all 0.4s ease",
         display: "block",
         width: "100%",
       }}
       className="group-hover:-translate-y-2 group-hover:shadow-2xl transition-all"
     >
-      <div style={{ overflow: "hidden", height: large ? 400 : 260 }}>
+      <div style={{ overflow: "hidden", height: large ? 400 : 260, background: "rgba(255,255,255,0.12)" }}>
         <ImageWithFallback
           src={getImg(project.image)}
           alt={project.title}
           className="w-full h-full object-cover object-top group-hover:scale-[1.03] transition-transform duration-700"
         />
       </div>
-      <div style={{ padding: large ? "32px 32px" : "24px 24px", background: "linear-gradient(180deg, rgba(255,255,255,0.2), rgba(255,255,255,0.74))" }}>
+      <div style={{ padding: large ? "32px 32px" : "24px 24px", background: "rgba(255,255,255,0.14)", backdropFilter: "blur(18px)", WebkitBackdropFilter: "blur(18px)" }}>
         <div className="flex flex-wrap gap-2 mb-4">
           {project.tags.map((t) => (
             <span key={t} style={{ fontSize: 11, fontWeight: 600, color: project.accent, background: `${project.accent}14`, borderRadius: 6, padding: "3px 10px", letterSpacing: "0.04em", fontFamily: "'Noto Sans SC', 'Inter', sans-serif" }}>
@@ -730,18 +738,36 @@ function StepCard({ num, title, desc, accent }: { num: string; title: string; de
 
 function ProjectQuickNav({ current, onOpenProject }: { current: string; onOpenProject: (id: string) => void }) {
   const items = [
-    { id: "yiqichufa", label: "一起出发" },
-    { id: "eventos", label: "EventOS" },
-    { id: "timeapp", label: "时间 APP" },
+    { id: "yiqichufa", label: "一起出发", accent: "#10B981" },
+    { id: "eventos", label: "EventOS", accent: "#F97316" },
+    { id: "timeapp", label: "时间 APP", accent: "#8B5CF6" },
   ].filter((item) => item.id !== current);
 
   return (
-    <div style={{ display: "flex", flexWrap: "wrap", gap: 12, marginTop: 40 }}>
+    <div style={{ display: "flex", flexWrap: "wrap", gap: 16, marginTop: 40 }}>
       {items.map((item) => (
         <button
           key={item.id}
           onClick={() => onOpenProject(item.id)}
-          style={{ background: "rgba(255,255,255,0.82)", border: `1px solid ${C.border}`, borderRadius: 999, padding: "10px 16px", fontWeight: 600, color: C.text, cursor: "pointer" }}
+          style={{
+            background: item.accent,
+            border: `1px solid ${item.accent}`,
+            borderRadius: 999,
+            padding: "18px 26px",
+            fontWeight: 700,
+            color: "#fff",
+            cursor: "pointer",
+            minWidth: 190,
+            fontSize: 15,
+            boxShadow: `0 20px 46px ${item.accent}40`,
+            transition: "transform 0.2s ease, box-shadow 0.2s ease",
+          }}
+          onMouseEnter={(e) => {
+            (e.currentTarget as HTMLButtonElement).style.transform = "translateY(-2px)";
+          }}
+          onMouseLeave={(e) => {
+            (e.currentTarget as HTMLButtonElement).style.transform = "translateY(0)";
+          }}
         >
           查看 {item.label}
         </button>
@@ -756,32 +782,29 @@ function EventosDetail({ onBack, onOpenProject }: { onBack: () => void; onOpenPr
     <div style={{ background: C.bg, minHeight: "100vh", fontFamily: "'Noto Sans SC', 'Inter', sans-serif" }}>
       <BackButton onBack={onBack} />
 
-      {/* Hero banner */}
-      <div style={{ background: C.text, paddingTop: 80, paddingBottom: 64 }}>
-        <div className="max-w-[1200px] mx-auto px-6 md:px-12">
-          <motion.div initial={{ opacity: 0, y: 24 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }}>
-            <div style={{ fontSize: 11, color: "rgba(255,255,255,0.4)", letterSpacing: "0.12em", fontWeight: 600, marginBottom: 16 }}>TIER 2 · B2B SaaS</div>
-            <h1 style={{ fontSize: "clamp(40px, 6vw, 72px)", fontWeight: 700, color: "#fff", lineHeight: 1.05, letterSpacing: "-0.02em", marginBottom: 16 }}>EventOS</h1>
-            <p style={{ fontSize: 18, color: "rgba(255,255,255,0.55)", marginBottom: 0 }}>AI 原生 To B Web · 智能活动运营管理平台</p>
-          </motion.div>
-        </div>
-      </div>
-
       <div className="max-w-[1200px] mx-auto px-6 md:px-12 py-20">
-        {/* Main image */}
+        <Reveal>
+          <div style={{ background: "rgba(255,255,255,0.9)", borderRadius: 24, padding: "30px 36px", border: `1px solid ${C.border}`, boxShadow: "0 24px 80px rgba(15,23,42,0.08)", marginBottom: 56 }}>
+            <div style={{ marginBottom: 14 }}>
+              <div style={{ fontSize: 12, textTransform: "uppercase", letterSpacing: "0.18em", color: "#F97316", fontWeight: 700, marginBottom: 10 }}>EventOS</div>
+              <div style={{ fontSize: "clamp(28px, 4vw, 48px)", fontWeight: 800, color: C.text, lineHeight: 1.05, marginBottom: 12 }}>AI 原生 To B Web · 智能活动运营管理平台</div>
+              <div style={{ fontSize: 15, color: C.muted, maxWidth: 760, lineHeight: 1.8 }}>
+                这是一个面向活动运营的智能协作平台，通过结构化权限与数据展示，让运营人员在复杂现场中保持对节点与风险的可控。
+              </div>
+            </div>
+            <div style={{ background: "#F9731610", borderRadius: 18, padding: "22px 24px", marginTop: 18, border: "1px solid rgba(249,115,22,0.16)" }}>
+              <div style={{ fontSize: 13, color: "#F97316", fontWeight: 700, letterSpacing: "0.12em", textTransform: "uppercase", marginBottom: 10 }}>核心洞察</div>
+              <div style={{ fontSize: 18, color: C.text, lineHeight: 1.8 }}>
+                AI 原生业务的价值不在于功能堆叠，而在于让“谁该看到什么”变得透明、可控、可响应。合理的权限与信息流比界面呈现更先行。
+              </div>
+            </div>
+          </div>
+        </Reveal>
+
         <Reveal>
           <div style={{ borderRadius: 20, overflow: "hidden", border: `1px solid ${C.border}`, boxShadow: "0 16px 60px rgba(0,0,0,0.08)", marginBottom: 64 }}>
             <ImageWithFallback src={eventosImg} alt="EventOS 平台界面总览" className="w-full" style={{ objectFit: "cover", objectPosition: "top" }} />
           </div>
-        </Reveal>
-
-        {/* Insight */}
-        <Reveal>
-          <InfoBlock
-            label="核心洞察"
-            title="实时响应依赖结构化权限体系"
-            desc="关键差异化能力不在于功能数量，而在于权限架构的精准设计——对的人，在对的时间，看到对的信息。其余一切都是界面层面的问题。"
-          />
         </Reveal>
 
         {/* Steps */}
@@ -826,24 +849,22 @@ function YiqichufaDetail({ onBack, onOpenProject }: { onBack: () => void; onOpen
     <div style={{ background: C.bg, minHeight: "100vh", fontFamily: "'Noto Sans SC', 'Inter', sans-serif" }}>
       <BackButton onBack={onBack} />
 
-      <div style={{ background: "#064E3B", paddingTop: 80, paddingBottom: 64 }}>
-        <div className="max-w-[1200px] mx-auto px-6 md:px-12">
-          <motion.div initial={{ opacity: 0, y: 24 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }}>
-            <div style={{ fontSize: 11, color: "rgba(255,255,255,0.4)", letterSpacing: "0.12em", fontWeight: 600, marginBottom: 16 }}>TIER 1 · 主打项目</div>
-            <h1 style={{ fontSize: "clamp(40px, 6vw, 72px)", fontWeight: 700, color: "#fff", lineHeight: 1.05, letterSpacing: "-0.01em", marginBottom: 16 }}>一起出发</h1>
-            <p style={{ fontSize: 18, color: "rgba(255,255,255,0.55)", marginBottom: 0 }}>多人旅行协作决策平台</p>
-          </motion.div>
-        </div>
-      </div>
-
       <div className="max-w-[1200px] mx-auto px-6 md:px-12 py-20">
-        {/* Core insight highlight */}
         <Reveal>
-          <div style={{ background: "#10B98110", border: "1px solid #10B98130", borderRadius: 16, padding: "28px 36px", marginBottom: 48 }}>
-            <div style={{ fontSize: 13, color: "#10B981", fontWeight: 700, letterSpacing: "0.08em", marginBottom: 12 }}>核心洞察</div>
-            <p style={{ fontSize: 22, fontWeight: 600, color: C.text, lineHeight: 1.5 }}>
-              "多人出行的核心问题不是信息缺失，<br />而是决策不可见。"
-            </p>
+          <div style={{ background: "rgba(255,255,255,0.9)", borderRadius: 24, padding: "30px 36px", border: `1px solid ${C.border}`, boxShadow: "0 24px 80px rgba(15,23,42,0.08)", marginBottom: 56 }}>
+            <div style={{ marginBottom: 14 }}>
+              <div style={{ fontSize: 12, textTransform: "uppercase", letterSpacing: "0.18em", color: "#10B981", fontWeight: 700, marginBottom: 10 }}>一起出发</div>
+              <div style={{ fontSize: "clamp(28px, 4vw, 48px)", fontWeight: 800, color: C.text, lineHeight: 1.05, marginBottom: 12 }}>多人旅行协作决策平台</div>
+              <div style={{ fontSize: 15, color: C.muted, maxWidth: 760, lineHeight: 1.8 }}>
+                将群聊决策转化为结构化协作流程，让决策路径可视、角色分工明确，减少“我不知道大家想法”的旅行不确定性。
+              </div>
+            </div>
+            <div style={{ background: "#10B98110", borderRadius: 18, padding: "22px 24px", marginTop: 18, border: "1px solid rgba(16,185,129,0.16)" }}>
+              <div style={{ fontSize: 13, color: "#10B981", fontWeight: 700, letterSpacing: "0.12em", textTransform: "uppercase", marginBottom: 10 }}>核心洞察</div>
+              <div style={{ fontSize: 18, color: C.text, lineHeight: 1.8 }}>
+                多人协作不是信息更多，而是决策更透明。真正的价值在于把“谁负责什么”与“谁看到什么”变成可追踪的体验节点。
+              </div>
+            </div>
           </div>
         </Reveal>
 
@@ -895,23 +916,22 @@ function TimeAppDetail({ onBack, onOpenProject }: { onBack: () => void; onOpenPr
     <div style={{ background: C.bg, minHeight: "100vh", fontFamily: "'Noto Sans SC', 'Inter', sans-serif" }}>
       <BackButton onBack={onBack} />
 
-      <div style={{ background: "#2E1065", paddingTop: 80, paddingBottom: 64 }}>
-        <div className="max-w-[1200px] mx-auto px-6 md:px-12">
-          <motion.div initial={{ opacity: 0, y: 24 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }}>
-            <div style={{ fontSize: 11, color: "rgba(255,255,255,0.4)", letterSpacing: "0.12em", fontWeight: 600, marginBottom: 16 }}>TIER 3 · 个人项目</div>
-            <h1 style={{ fontSize: "clamp(40px, 6vw, 72px)", fontWeight: 700, color: "#fff", lineHeight: 1.05, letterSpacing: "-0.01em", marginBottom: 16 }}>时间 APP</h1>
-            <p style={{ fontSize: 18, color: "rgba(255,255,255,0.55)", marginBottom: 0 }}>个人时间资产管理工具</p>
-          </motion.div>
-        </div>
-      </div>
-
       <div className="max-w-[1200px] mx-auto px-6 md:px-12 py-20">
         <Reveal>
-          <div style={{ background: "#8B5CF610", border: "1px solid #8B5CF630", borderRadius: 16, padding: "28px 36px", marginBottom: 48 }}>
-            <div style={{ fontSize: 13, color: "#8B5CF6", fontWeight: 700, letterSpacing: "0.08em", marginBottom: 12 }}>产品理念</div>
-            <p style={{ fontSize: 22, fontWeight: 600, color: C.text, lineHeight: 1.5 }}>
-              "时间不是日历上的格子，<br />而是你最有限的个人资产。"
-            </p>
+          <div style={{ background: "rgba(255,255,255,0.9)", borderRadius: 24, padding: "30px 36px", border: `1px solid ${C.border}`, boxShadow: "0 24px 80px rgba(15,23,42,0.08)", marginBottom: 56 }}>
+            <div style={{ marginBottom: 14 }}>
+              <div style={{ fontSize: 12, textTransform: "uppercase", letterSpacing: "0.18em", color: "#8B5CF6", fontWeight: 700, marginBottom: 10 }}>时间 APP</div>
+              <div style={{ fontSize: "clamp(28px, 4vw, 48px)", fontWeight: 800, color: C.text, lineHeight: 1.05, marginBottom: 12 }}>个人时间资产管理工具</div>
+              <div style={{ fontSize: 15, color: C.muted, maxWidth: 760, lineHeight: 1.8 }}>
+                这个项目把时间从“日历格子”转为“个人资产”，帮助用户看见自己的时间分配并形成更清晰的使用路径。
+              </div>
+            </div>
+            <div style={{ background: "#8B5CF610", borderRadius: 18, padding: "22px 24px", marginTop: 18, border: "1px solid rgba(139,92,246,0.16)" }}>
+              <div style={{ fontSize: 13, color: "#8B5CF6", fontWeight: 700, letterSpacing: "0.12em", textTransform: "uppercase", marginBottom: 10 }}>核心洞察</div>
+              <div style={{ fontSize: 18, color: C.text, lineHeight: 1.8 }}>
+                真正高级的时间工具，不是任务列表，而是让用户看到“时间在哪里流走”，并把时间管理变成一种更自然的认知习惯。
+              </div>
+            </div>
           </div>
         </Reveal>
 
