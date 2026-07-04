@@ -248,7 +248,7 @@ function Hero() {
                 查看作品集
               </a>
               <a
-                href="/resume.pdf"
+                href="/简历-设计.pdf"
                 target="_blank"
                 rel="noreferrer"
                 style={{ border: `1.5px solid ${C.border}`, color: C.text, padding: "12px 28px", borderRadius: 999, fontWeight: 500, fontSize: 15, fontFamily: "'Noto Sans SC', 'Inter', sans-serif", display: "inline-block", textDecoration: "none" }}
