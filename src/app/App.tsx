@@ -292,8 +292,8 @@ function Hero() {
               />
               <div
                 style={{
-                  width: 380,
-                  height: 460,
+                  width: 460,
+                  height: 560,
                   borderRadius: 32,
                   overflow: "hidden",
                   boxShadow: "0 32px 80px rgba(0,0,0,0.14)",
@@ -325,10 +325,7 @@ function Hero() {
                   zIndex: 2,
                 }}
               >
-                <div style={{ fontSize: 11, color: C.muted, fontFamily: "'Noto Sans SC', sans-serif" }}>中南大学 · 产品设计专业</div>
-                <div style={{ fontSize: 15, fontWeight: 600, color: C.text, fontFamily: "'Noto Sans SC', sans-serif", marginTop: 2 }}>
-                  求职中 · PM / UX 实习
-                </div>
+                <div style={{ fontSize: 13, fontWeight: 700, color: C.text, fontFamily: "'Noto Sans SC', sans-serif" }}>中南大学 · 产品设计专业</div>
               </motion.div>
             </div>
           </motion.div>
