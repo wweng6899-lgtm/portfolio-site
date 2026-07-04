@@ -35,14 +35,80 @@ function Reveal({ children, delay = 0, className = "" }: { children: React.React
 
 function SectionLabel({ text }: { text: string }) {
   return (
-    <span style={{ color: C.accent, letterSpacing: "0.12em", fontSize: 11, fontWeight: 600, fontFamily: "'Inter', sans-serif" }} className="uppercase">
+    <span style={{ color: C.accent, letterSpacing: "0.2em", fontSize: 20, fontWeight: 700, fontFamily: "'Inter', sans-serif" }} className="uppercase">
       {text}
     </span>
   );
 }
 
+function ContactModal({ open, onClose }: { open: boolean; onClose: () => void }) {
+  if (!open) return null;
+
+  const contacts = [
+    { label: "邮箱", value: "1269383427@qq.com", href: "mailto:1269383427@qq.com" },
+    { label: "电话", value: "15872692052", href: "tel:15872692052" },
+    { label: "微信", value: "thriving-67", href: "#" },
+  ];
+
+  return (
+    <div
+      style={{
+        position: "fixed",
+        inset: 0,
+        zIndex: 200,
+        background: "rgba(17, 17, 17, 0.45)",
+        backdropFilter: "blur(8px)",
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+        padding: 24,
+      }}
+      onClick={onClose}
+    >
+      <div
+        onClick={(e) => e.stopPropagation()}
+        style={{
+          width: "min(92vw, 520px)",
+          background: "rgba(255,255,255,0.92)",
+          border: `1px solid ${C.border}`,
+          borderRadius: 24,
+          padding: "28px 24px",
+          boxShadow: "0 24px 80px rgba(0,0,0,0.2)",
+        }}
+      >
+        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 20 }}>
+          <div style={{ fontSize: 18, fontWeight: 700, color: C.text }}>联系我</div>
+          <button onClick={onClose} style={{ background: "none", border: "none", cursor: "pointer", fontSize: 18, color: C.muted }}>✕</button>
+        </div>
+        <div style={{ display: "grid", gap: 12 }}>
+          {contacts.map((item) => (
+            <a
+              key={item.label}
+              href={item.href}
+              style={{
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "space-between",
+                padding: "14px 16px",
+                borderRadius: 16,
+                border: `1px solid ${C.border}`,
+                background: "rgba(99,102,241,0.06)",
+                color: C.text,
+                textDecoration: "none",
+              }}
+            >
+              <span style={{ fontWeight: 700, color: C.accent }}>{item.label}</span>
+              <span style={{ fontWeight: 600 }}>{item.value}</span>
+            </a>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+}
+
 // ─── Nav ──────────────────────────────────────────────────────────────────────
-function Nav({ onNav }: { onNav: (id: string) => void }) {
+function Nav({ onNav, onOpenContact }: { onNav: (id: string) => void; onOpenContact: () => void }) {
   const [scrolled, setScrolled] = useState(false);
   useEffect(() => {
     const h = () => setScrolled(window.scrollY > 40);
@@ -89,13 +155,13 @@ function Nav({ onNav }: { onNav: (id: string) => void }) {
               {l.label}
             </button>
           ))}
-          <a
-            href="tel:15872692052"
-            style={{ fontSize: 13, fontFamily: "'Inter', sans-serif", background: C.accent, color: "#fff", padding: "7px 18px", borderRadius: 8, fontWeight: 500, textDecoration: "none" }}
+          <button
+            onClick={onOpenContact}
+            style={{ fontSize: 13, fontFamily: "'Inter', sans-serif", background: C.accent, color: "#fff", padding: "7px 18px", borderRadius: 8, fontWeight: 500, border: "none", cursor: "pointer" }}
             className="hover:opacity-80 transition-opacity"
           >
             联系我
-          </a>
+          </button>
         </div>
       </div>
     </motion.nav>
@@ -111,7 +177,7 @@ function Hero() {
           {/* Left */}
           <div>
             <motion.div initial={{ opacity: 0, y: 32 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.7, delay: 0.2 }}>
-              <SectionLabel text="产品设计师 · UI/UX 设计师" />
+              <SectionLabel text="UI/UX设计师 | 产品实习生" />
             </motion.div>
 
             <motion.h1
@@ -120,16 +186,16 @@ function Hero() {
               transition={{ duration: 0.7, delay: 0.35 }}
               style={{
                 fontFamily: "'Noto Sans SC', 'Inter', sans-serif",
-                fontSize: "clamp(52px, 7vw, 88px)",
+                fontSize: "clamp(46px, 6.2vw, 78px)",
                 fontWeight: 700,
-                lineHeight: 1.05,
+                lineHeight: 1.08,
                 letterSpacing: "-0.02em",
                 color: C.text,
                 marginTop: 20,
                 marginBottom: 16,
               }}
             >
-              翁佳欣
+              让复杂体验，变成清晰好用的界面。
             </motion.h1>
 
             <motion.p
@@ -137,7 +203,7 @@ function Hero() {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.45 }}
               style={{
-                fontSize: "clamp(18px, 2.5vw, 26px)",
+                fontSize: "clamp(18px, 2.3vw, 24px)",
                 color: C.muted,
                 lineHeight: 1.5,
                 fontFamily: "'Noto Sans SC', 'Inter', sans-serif",
@@ -146,7 +212,7 @@ function Hero() {
                 letterSpacing: "0.01em",
               }}
             >
-              将复杂化为清晰
+              我擅长把复杂需求拆成清晰、顺手的界面与体验，长期关注用户思维、交互逻辑与视觉表达。
             </motion.p>
 
             <motion.p
@@ -158,40 +224,41 @@ function Hero() {
                 color: C.muted,
                 lineHeight: 1.85,
                 fontFamily: "'Noto Sans SC', 'Inter', sans-serif",
-                maxWidth: 420,
+                maxWidth: 460,
                 marginBottom: 40,
               }}
             >
-              产品思维驱动的设计师，擅长系统拆解、信息架构与 AI 原生工作流。
-              正在寻找产品经理 / UI-UX 设计实习机会。
+              以 UI / UX 设计为主，兼顾产品思维与协作落地，致力于做出更容易被理解、被使用的产品体验。
             </motion.p>
 
             <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5, delay: 0.65 }} className="flex flex-wrap gap-3">
               <a
                 href="#works"
-                style={{ background: C.text, color: "#fff", padding: "12px 28px", borderRadius: 10, fontWeight: 600, fontSize: 15, fontFamily: "'Noto Sans SC', 'Inter', sans-serif", display: "inline-block", textDecoration: "none" }}
+                style={{ background: C.text, color: "#fff", padding: "12px 28px", borderRadius: 999, fontWeight: 600, fontSize: 15, fontFamily: "'Noto Sans SC', 'Inter', sans-serif", display: "inline-block", textDecoration: "none" }}
                 className="hover:opacity-80 transition-opacity"
               >
                 查看作品集
               </a>
               <a
-                href="mailto:1269383427@qq.com"
-                style={{ border: `1.5px solid ${C.border}`, color: C.text, padding: "12px 28px", borderRadius: 10, fontWeight: 500, fontSize: 15, fontFamily: "'Noto Sans SC', 'Inter', sans-serif", display: "inline-block", textDecoration: "none" }}
+                href="/resume.pdf"
+                target="_blank"
+                rel="noreferrer"
+                style={{ border: `1.5px solid ${C.border}`, color: C.text, padding: "12px 28px", borderRadius: 999, fontWeight: 500, fontSize: 15, fontFamily: "'Noto Sans SC', 'Inter', sans-serif", display: "inline-block", textDecoration: "none" }}
                 className="hover:border-[#6366F1] hover:text-[#6366F1] transition-all"
               >
-                下载简历
+                获取简历
               </a>
             </motion.div>
 
-            <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.9 }} className="flex gap-8 mt-12">
+            <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.9 }} className="flex flex-wrap gap-4 mt-12">
               {[
-                { n: "3", l: "个完整项目" },
-                { n: "2+", l: "年设计经验" },
-                { n: "AI", l: "原生工作流" },
+                { n: "UI", l: "UI / UX 用户思维" },
+                { n: "3", l: "完整项目案例" },
+                { n: "Figma", l: "原型与协作" },
               ].map((s) => (
-                <div key={s.l}>
-                  <div style={{ fontSize: 24, fontWeight: 700, color: C.text, fontFamily: "'Inter', sans-serif", lineHeight: 1 }}>{s.n}</div>
-                  <div style={{ fontSize: 12, color: C.muted, marginTop: 4, fontFamily: "'Noto Sans SC', sans-serif" }}>{s.l}</div>
+                <div key={s.l} style={{ background: "rgba(255,255,255,0.75)", border: `1px solid ${C.border}`, borderRadius: 24, padding: "14px 16px", minWidth: 140, boxShadow: "0 12px 30px rgba(0,0,0,0.05)" }}>
+                  <div style={{ fontSize: 22, fontWeight: 700, color: C.text, fontFamily: "'Inter', sans-serif", lineHeight: 1 }}>{s.n}</div>
+                  <div style={{ fontSize: 12, color: C.muted, marginTop: 6, fontFamily: "'Noto Sans SC', sans-serif" }}>{s.l}</div>
                 </div>
               ))}
             </motion.div>
@@ -277,15 +344,13 @@ function About() {
         <Reveal>
           <SectionLabel text="关于我" />
           <h2 style={{ fontFamily: "'Noto Sans SC', 'Inter', sans-serif", fontSize: "clamp(32px, 4vw, 48px)", fontWeight: 700, letterSpacing: "-0.01em", color: C.text, marginTop: 12, marginBottom: 16, lineHeight: 1.2 }}>
-            像产品经理一样思考
-            <br />
-            的设计师。
+            以用户思维，做更清晰好用的界面体验。
           </h2>
-          <p style={{ fontSize: 16, color: C.muted, lineHeight: 1.85, maxWidth: 560, fontFamily: "'Noto Sans SC', 'Inter', sans-serif", marginBottom: 56 }}>
+          <p style={{ fontSize: 16, color: C.muted, lineHeight: 1.85, maxWidth: 620, fontFamily: "'Noto Sans SC', 'Inter', sans-serif", marginBottom: 56 }}>
             中南大学产品设计专业在读，曾在
             <strong style={{ color: C.text }}>海艺 AI</strong>
-            担任产品实习生，主导从需求分析到产品交付的完整流程。
-            善于将复杂系统转化为清晰的用户体验，具备扎实的产品思维与跨职能协作能力。
+            接触产品实习与真实业务场景，持续打磨从用户研究到界面落地的完整思考路径。
+            我更关注用户行为、信息层级与界面效率，让复杂需求变成清晰且可被轻松使用的体验。
           </p>
         </Reveal>
 
@@ -408,7 +473,18 @@ function Works({ onOpenProject }: { onOpenProject: (id: string) => void }) {
 function ProjectCard({ project, large }: { project: Project; large?: boolean }) {
   return (
     <div
-      style={{ background: C.bg, borderRadius: 20, overflow: "hidden", border: `1px solid ${C.border}`, boxShadow: C.shadow, transition: "all 0.4s ease", display: "block", width: "100%" }}
+      style={{
+        background: "rgba(255,255,255,0.62)",
+        backdropFilter: "blur(18px)",
+        WebkitBackdropFilter: "blur(18px)",
+        borderRadius: 28,
+        overflow: "hidden",
+        border: `1px solid rgba(255,255,255,0.7)`,
+        boxShadow: "0 24px 70px rgba(15,23,42,0.12)",
+        transition: "all 0.4s ease",
+        display: "block",
+        width: "100%",
+      }}
       className="group-hover:-translate-y-2 group-hover:shadow-2xl transition-all"
     >
       <div style={{ overflow: "hidden", height: large ? 400 : 260 }}>
@@ -418,7 +494,7 @@ function ProjectCard({ project, large }: { project: Project; large?: boolean }) 
           className="w-full h-full object-cover object-top group-hover:scale-[1.03] transition-transform duration-700"
         />
       </div>
-      <div style={{ padding: large ? "32px 32px" : "24px 24px" }}>
+      <div style={{ padding: large ? "32px 32px" : "24px 24px", background: "linear-gradient(180deg, rgba(255,255,255,0.2), rgba(255,255,255,0.74))" }}>
         <div className="flex flex-wrap gap-2 mb-4">
           {project.tags.map((t) => (
             <span key={t} style={{ fontSize: 11, fontWeight: 600, color: project.accent, background: `${project.accent}14`, borderRadius: 6, padding: "3px 10px", letterSpacing: "0.04em", fontFamily: "'Noto Sans SC', 'Inter', sans-serif" }}>
@@ -511,10 +587,10 @@ function Experience() {
 // ─── Skills ───────────────────────────────────────────────────────────────────
 function Skills() {
   const groups = [
-    { label: "产品", color: "#6366F1", items: ["需求分析", "PRD 撰写", "产品规划", "业务流程设计", "产品架构"] },
+    { label: "设计工具", color: "#F59E0B", items: ["Figma", "Figma Make", "剪映", "Rhino", "Keyshot"] },
     { label: "用户体验", color: "#10B981", items: ["用户研究", "信息架构", "交互设计", "用户旅程地图", "原型设计"] },
-    { label: "设计工具", color: "#F59E0B", items: ["Figma", "Photoshop", "Illustrator"] },
-    { label: "AI 工作流", color: "#8B5CF6", items: ["ChatGPT", "Google AI Studio", "Codex", "Prompt Engineering", "AI 辅助 PRD"] },
+    { label: "产品", color: "#6366F1", items: ["需求分析", "PRD 撰写", "产品规划", "业务流程设计", "产品架构"] },
+    { label: "AI 工作流", color: "#8B5CF6", items: ["ChatGPT", "Claude Code", "Google AI Studio", "VSCode", "Codex", "Prompt Engineering"] },
   ];
 
   return (
@@ -569,25 +645,26 @@ function Contact() {
             <div className="flex flex-wrap gap-4 mb-16">
               <a
                 href="mailto:1269383427@qq.com"
-                style={{ background: C.accent, color: "#fff", padding: "13px 28px", borderRadius: 10, fontWeight: 600, fontSize: 15, fontFamily: "'Noto Sans SC', 'Inter', sans-serif", display: "inline-block", textDecoration: "none" }}
-                className="hover:opacity-80 transition-opacity"
+                style={{ background: "linear-gradient(135deg, #6366F1, #8B5CF6)", color: "#fff", padding: "14px 20px", borderRadius: 16, fontWeight: 600, fontSize: 15, fontFamily: "'Noto Sans SC', 'Inter', sans-serif", display: "inline-flex", alignItems: "center", gap: 8, textDecoration: "none", boxShadow: "0 16px 40px rgba(99,102,241,0.3)" }}
+                className="hover:translate-y-[-2px] transition-transform"
               >
-                1269383427@qq.com
+                <span style={{ fontSize: 14, fontWeight: 700 }}>邮箱</span>
+                <span>1269383427@qq.com</span>
               </a>
               <a
                 href="tel:15872692052"
-                style={{ border: "1.5px solid rgba(255,255,255,0.15)", color: "rgba(255,255,255,0.7)", padding: "13px 28px", borderRadius: 10, fontWeight: 500, fontSize: 15, fontFamily: "'Noto Sans SC', 'Inter', sans-serif", display: "inline-block", textDecoration: "none" }}
+                style={{ border: "1.5px solid rgba(255,255,255,0.15)", color: "rgba(255,255,255,0.8)", padding: "14px 20px", borderRadius: 16, fontWeight: 500, fontSize: 15, fontFamily: "'Noto Sans SC', 'Inter', sans-serif", display: "inline-flex", alignItems: "center", gap: 8, textDecoration: "none", background: "rgba(255,255,255,0.06)" }}
                 className="hover:border-white hover:text-white transition-all"
               >
-                15872692052
+                <span style={{ fontSize: 14, fontWeight: 700 }}>电话</span>
+                <span>15872692052</span>
               </a>
-              <a
-                href="#"
-                style={{ border: "1.5px solid rgba(255,255,255,0.15)", color: "rgba(255,255,255,0.7)", padding: "13px 28px", borderRadius: 10, fontWeight: 500, fontSize: 15, fontFamily: "'Noto Sans SC', 'Inter', sans-serif", display: "inline-block", textDecoration: "none" }}
-                className="hover:border-white hover:text-white transition-all"
+              <div
+                style={{ border: "1.5px solid rgba(255,255,255,0.15)", color: "rgba(255,255,255,0.8)", padding: "14px 20px", borderRadius: 16, fontWeight: 500, fontSize: 15, fontFamily: "'Noto Sans SC', 'Inter', sans-serif", display: "inline-flex", alignItems: "center", gap: 8, background: "rgba(255,255,255,0.06)" }}
               >
-                微信：thriving-67
-              </a>
+                <span style={{ fontSize: 14, fontWeight: 700 }}>微信</span>
+                <span>thriving-67</span>
+              </div>
             </div>
           </div>
         </Reveal>
@@ -631,15 +708,6 @@ function BackButton({ onBack }: { onBack: () => void }) {
   );
 }
 
-function OverviewCard({ label, val }: { label: string; val: string }) {
-  return (
-    <div style={{ background: "#fff", borderRadius: 12, padding: "20px 20px", border: `1px solid ${C.border}` }}>
-      <div style={{ fontSize: 11, color: C.muted, fontWeight: 600, letterSpacing: "0.08em", fontFamily: "'Noto Sans SC', 'Inter', sans-serif", marginBottom: 6, textTransform: "uppercase" }}>{label}</div>
-      <div style={{ fontSize: 15, fontWeight: 600, color: C.text, fontFamily: "'Noto Sans SC', 'Inter', sans-serif" }}>{val}</div>
-    </div>
-  );
-}
-
 function InfoBlock({ label, title, desc }: { label: string; title: string; desc: string }) {
   return (
     <div>
@@ -660,8 +728,30 @@ function StepCard({ num, title, desc, accent }: { num: string; title: string; de
   );
 }
 
+function ProjectQuickNav({ current, onOpenProject }: { current: string; onOpenProject: (id: string) => void }) {
+  const items = [
+    { id: "yiqichufa", label: "一起出发" },
+    { id: "eventos", label: "EventOS" },
+    { id: "timeapp", label: "时间 APP" },
+  ].filter((item) => item.id !== current);
+
+  return (
+    <div style={{ display: "flex", flexWrap: "wrap", gap: 12, marginTop: 40 }}>
+      {items.map((item) => (
+        <button
+          key={item.id}
+          onClick={() => onOpenProject(item.id)}
+          style={{ background: "rgba(255,255,255,0.82)", border: `1px solid ${C.border}`, borderRadius: 999, padding: "10px 16px", fontWeight: 600, color: C.text, cursor: "pointer" }}
+        >
+          查看 {item.label}
+        </button>
+      ))}
+    </div>
+  );
+}
+
 // ── EventOS Detail ────────────────────────────────────────────────────────────
-function EventosDetail({ onBack }: { onBack: () => void }) {
+function EventosDetail({ onBack, onOpenProject }: { onBack: () => void; onOpenProject: (id: string) => void }) {
   return (
     <div style={{ background: C.bg, minHeight: "100vh", fontFamily: "'Noto Sans SC', 'Inter', sans-serif" }}>
       <BackButton onBack={onBack} />
@@ -678,16 +768,6 @@ function EventosDetail({ onBack }: { onBack: () => void }) {
       </div>
 
       <div className="max-w-[1200px] mx-auto px-6 md:px-12 py-20">
-        {/* Overview */}
-        <Reveal>
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-16">
-            <OverviewCard label="担任角色" val="产品负责人" />
-            <OverviewCard label="产品形态" val="Web B2B SaaS" />
-            <OverviewCard label="技术栈" val="AI Studio · Vercel" />
-            <OverviewCard label="交付状态" val="完整上线交付" />
-          </div>
-        </Reveal>
-
         {/* Main image */}
         <Reveal>
           <div style={{ borderRadius: 20, overflow: "hidden", border: `1px solid ${C.border}`, boxShadow: "0 16px 60px rgba(0,0,0,0.08)", marginBottom: 64 }}>
@@ -695,23 +775,14 @@ function EventosDetail({ onBack }: { onBack: () => void }) {
           </div>
         </Reveal>
 
-        {/* Problem + Insight */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-12 mb-16">
-          <Reveal>
-            <InfoBlock
-              label="问题背景"
-              title="复杂工作流，缺乏统一数据源"
-              desc="活动运营涉及数十个角色——主办方、供应商、场馆人员、参会者——每个角色权限不同，视角不同，紧迫程度不同。现有工具依赖 Excel 和微信群组，在活动直播阶段产生大量隐性风险。"
-            />
-          </Reveal>
-          <Reveal delay={0.1}>
-            <InfoBlock
-              label="核心洞察"
-              title="实时响应依赖结构化权限体系"
-              desc="关键差异化能力不在于功能数量，而在于权限架构的精准设计——对的人，在对的时间，看到对的信息。其余一切都是界面层面的问题。"
-            />
-          </Reveal>
-        </div>
+        {/* Insight */}
+        <Reveal>
+          <InfoBlock
+            label="核心洞察"
+            title="实时响应依赖结构化权限体系"
+            desc="关键差异化能力不在于功能数量，而在于权限架构的精准设计——对的人，在对的时间，看到对的信息。其余一切都是界面层面的问题。"
+          />
+        </Reveal>
 
         {/* Steps */}
         <Reveal>
@@ -742,13 +813,15 @@ function EventosDetail({ onBack }: { onBack: () => void }) {
             </p>
           </div>
         </Reveal>
+
+        <ProjectQuickNav current="eventos" onOpenProject={onOpenProject} />
       </div>
     </div>
   );
 }
 
 // ── 一起出发 Detail ────────────────────────────────────────────────────────────
-function YiqichufaDetail({ onBack }: { onBack: () => void }) {
+function YiqichufaDetail({ onBack, onOpenProject }: { onBack: () => void; onOpenProject: (id: string) => void }) {
   return (
     <div style={{ background: C.bg, minHeight: "100vh", fontFamily: "'Noto Sans SC', 'Inter', sans-serif" }}>
       <BackButton onBack={onBack} />
@@ -764,16 +837,6 @@ function YiqichufaDetail({ onBack }: { onBack: () => void }) {
       </div>
 
       <div className="max-w-[1200px] mx-auto px-6 md:px-12 py-20">
-        {/* Overview */}
-        <Reveal>
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-16">
-            <OverviewCard label="担任角色" val="产品负责人 / UX 设计师" />
-            <OverviewCard label="产品形态" val="移动端 App" />
-            <OverviewCard label="核心方法" val="用户研究 + 原型验证" />
-            <OverviewCard label="聚焦场景" val="多人协作决策" />
-          </div>
-        </Reveal>
-
         {/* Core insight highlight */}
         <Reveal>
           <div style={{ background: "#10B98110", border: "1px solid #10B98130", borderRadius: 16, padding: "28px 36px", marginBottom: 48 }}>
@@ -790,24 +853,6 @@ function YiqichufaDetail({ onBack }: { onBack: () => void }) {
             <ImageWithFallback src={yiqichufaImg} alt="一起出发 — 多人旅行协作平台界面" className="w-full" style={{ objectFit: "cover", objectPosition: "top" }} />
           </div>
         </Reveal>
-
-        {/* Problem + Solution */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-12 mb-16">
-          <Reveal>
-            <InfoBlock
-              label="问题定义"
-              title="群聊是产品层面的失败模式"
-              desc="每次多人出行都从微信群开始：偏好被刷屏淹没，否决无从追溯，行程活在截图里。这不是沟通问题——是决策架构缺失的问题。用户的核心痛点是：我不知道大家到底想去哪，也不知道谁在负责什么。"
-            />
-          </Reveal>
-          <Reveal delay={0.1}>
-            <InfoBlock
-              label="解决思路"
-              title="结构化协作，而非另一个聊天工具"
-              desc="将混乱的群聊输入转化为有序的决策流程：偏好收集 → 投票聚合 → 行程生成 → 实时同步。让每一个决策都可见、可追溯、可协商。从「我不知道大家想法」到「所有人对行程达成一致」。"
-            />
-          </Reveal>
-        </div>
 
         {/* Process steps */}
         <Reveal>
@@ -837,13 +882,15 @@ function YiqichufaDetail({ onBack }: { onBack: () => void }) {
             </p>
           </div>
         </Reveal>
+
+        <ProjectQuickNav current="yiqichufa" onOpenProject={onOpenProject} />
       </div>
     </div>
   );
 }
 
 // ── 时间APP Detail ─────────────────────────────────────────────────────────────
-function TimeAppDetail({ onBack }: { onBack: () => void }) {
+function TimeAppDetail({ onBack, onOpenProject }: { onBack: () => void; onOpenProject: (id: string) => void }) {
   return (
     <div style={{ background: C.bg, minHeight: "100vh", fontFamily: "'Noto Sans SC', 'Inter', sans-serif" }}>
       <BackButton onBack={onBack} />
@@ -859,15 +906,6 @@ function TimeAppDetail({ onBack }: { onBack: () => void }) {
       </div>
 
       <div className="max-w-[1200px] mx-auto px-6 md:px-12 py-20">
-        <Reveal>
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-16">
-            <OverviewCard label="担任角色" val="产品设计师" />
-            <OverviewCard label="产品形态" val="移动端 App" />
-            <OverviewCard label="核心方向" val="行为设计 · 习惯养成" />
-            <OverviewCard label="视觉风格" val="暗色高级感 UI" />
-          </div>
-        </Reveal>
-
         <Reveal>
           <div style={{ background: "#8B5CF610", border: "1px solid #8B5CF630", borderRadius: 16, padding: "28px 36px", marginBottom: 48 }}>
             <div style={{ fontSize: 13, color: "#8B5CF6", fontWeight: 700, letterSpacing: "0.08em", marginBottom: 12 }}>产品理念</div>
@@ -907,13 +945,15 @@ function TimeAppDetail({ onBack }: { onBack: () => void }) {
             </p>
           </div>
         </Reveal>
+
+        <ProjectQuickNav current="timeapp" onOpenProject={onOpenProject} />
       </div>
     </div>
   );
 }
 
 // ─── Main Page ────────────────────────────────────────────────────────────────
-function MainPage({ onOpenProject }: { onOpenProject: (id: string) => void }) {
+function MainPage({ onOpenProject, onOpenContact }: { onOpenProject: (id: string) => void; onOpenContact: () => void }) {
   const scrollTo = (id: string) => {
     const el = document.getElementById(id);
     if (el) el.scrollIntoView({ behavior: "smooth" });
@@ -921,7 +961,7 @@ function MainPage({ onOpenProject }: { onOpenProject: (id: string) => void }) {
 
   return (
     <div style={{ fontFamily: "'Noto Sans SC', 'Inter', sans-serif", background: C.bg, color: C.text, overflowX: "hidden" }}>
-      <Nav onNav={scrollTo} />
+      <Nav onNav={scrollTo} onOpenContact={onOpenContact} />
       <Hero />
       <About />
       <Works onOpenProject={onOpenProject} />
@@ -935,6 +975,7 @@ function MainPage({ onOpenProject }: { onOpenProject: (id: string) => void }) {
 // ─── App Router ───────────────────────────────────────────────────────────────
 export default function App() {
   const [page, setPage] = useState<"main" | string>("main");
+  const [contactOpen, setContactOpen] = useState(false);
 
   const openProject = (id: string) => {
     setPage(id);
@@ -944,7 +985,6 @@ export default function App() {
   const goBack = () => {
     setPage("main");
     window.scrollTo({ top: 0, behavior: "instant" });
-    // scroll to works after a brief delay
     setTimeout(() => {
       const el = document.getElementById("works");
       if (el) el.scrollIntoView({ behavior: "smooth" });
@@ -952,27 +992,30 @@ export default function App() {
   };
 
   return (
-    <AnimatePresence mode="wait">
-      {page === "main" && (
-        <motion.div key="main" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ duration: 0.3 }}>
-          <MainPage onOpenProject={openProject} />
-        </motion.div>
-      )}
-      {page === "eventos" && (
-        <motion.div key="eventos" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ duration: 0.3 }}>
-          <EventosDetail onBack={goBack} />
-        </motion.div>
-      )}
-      {page === "yiqichufa" && (
-        <motion.div key="yiqichufa" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ duration: 0.3 }}>
-          <YiqichufaDetail onBack={goBack} />
-        </motion.div>
-      )}
-      {page === "timeapp" && (
-        <motion.div key="timeapp" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ duration: 0.3 }}>
-          <TimeAppDetail onBack={goBack} />
-        </motion.div>
-      )}
-    </AnimatePresence>
+    <>
+      <ContactModal open={contactOpen} onClose={() => setContactOpen(false)} />
+      <AnimatePresence mode="wait">
+        {page === "main" && (
+          <motion.div key="main" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ duration: 0.3 }}>
+            <MainPage onOpenProject={openProject} onOpenContact={() => setContactOpen(true)} />
+          </motion.div>
+        )}
+        {page === "eventos" && (
+          <motion.div key="eventos" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ duration: 0.3 }}>
+            <EventosDetail onBack={goBack} onOpenProject={openProject} />
+          </motion.div>
+        )}
+        {page === "yiqichufa" && (
+          <motion.div key="yiqichufa" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ duration: 0.3 }}>
+            <YiqichufaDetail onBack={goBack} onOpenProject={openProject} />
+          </motion.div>
+        )}
+        {page === "timeapp" && (
+          <motion.div key="timeapp" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ duration: 0.3 }}>
+            <TimeAppDetail onBack={goBack} onOpenProject={openProject} />
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </>
   );
 }
