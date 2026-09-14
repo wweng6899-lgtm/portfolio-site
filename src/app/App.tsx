@@ -8,12 +8,12 @@ import photoImg from "@/imports/524cf5c15bf4ba4173368f38c878599c.jpg";
 
 // ─── Tokens ───────────────────────────────────────────────────────────────────
 const C = {
-  bg: "#F7F6F2",
-  text: "#111111",
-  muted: "#6B7280",
-  accent: "#6366F1",
-  border: "rgba(0,0,0,0.08)",
-  shadow: "0 8px 30px rgba(0,0,0,0.06)",
+  bg: "#FAF9F7",
+  text: "#171717",
+  muted: "#5F5B59",
+  accent: "#FFA3E0",
+  border: "#E9E6E3",
+  shadow: "0 8px 30px rgba(20,20,20,0.06)",
 };
 
 // ─── Fade-up reveal ───────────────────────────────────────────────────────────
@@ -34,8 +34,10 @@ function Reveal({ children, delay = 0, className = "" }: { children: React.React
 }
 
 function SectionLabel({ text }: { text: string }) {
+  const largeLabels = new Set(["关于我", "精选作品", "工作经历", "专业技能"]);
+
   return (
-    <span style={{ color: C.accent, letterSpacing: "0.2em", fontSize: 24, fontWeight: 700, fontFamily: "'Inter', sans-serif" }} className="uppercase">
+    <span style={{ color: C.text, letterSpacing: "0.14em", fontSize: largeLabels.has(text) ? 24 : 12, fontWeight: 700, fontFamily: "'Inter', sans-serif" }} className="uppercase editorial-label">
       {text}
     </span>
   );
@@ -78,7 +80,7 @@ function ContactModal({ open, onClose }: { open: boolean; onClose: () => void })
       >
         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 20 }}>
           <div style={{ fontSize: 18, fontWeight: 700, color: C.text }}>联系我</div>
-          <button onClick={onClose} style={{ background: "none", border: "none", cursor: "pointer", fontSize: 18, color: C.muted }}>✕</button>
+          <button onClick={onClose} style={{ background: C.text, border: "none", borderRadius: 999, cursor: "pointer", fontSize: 18, color: "#fff", width: 32, height: 32 }}>✕</button>
         </div>
         <div style={{ display: "grid", gap: 12 }}>
           {contacts.map((item) => (
@@ -92,12 +94,12 @@ function ContactModal({ open, onClose }: { open: boolean; onClose: () => void })
                 padding: "14px 16px",
                 borderRadius: 16,
                 border: `1px solid ${C.border}`,
-                background: "rgba(99,102,241,0.06)",
+                background: "#fff",
                 color: C.text,
                 textDecoration: "none",
               }}
             >
-              <span style={{ fontWeight: 700, color: C.accent }}>{item.label}</span>
+              <span style={{ fontWeight: 700, color: C.text }}>{item.label}</span>
               <span style={{ fontWeight: 600 }}>{item.value}</span>
             </a>
           ))}
@@ -129,38 +131,32 @@ function Nav({ onNav, onOpenContact }: { onNav: (id: string) => void; onOpenCont
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5, delay: 0.1 }}
       style={{
-        background: scrolled ? "rgba(247,246,242,0.9)" : "transparent",
-        backdropFilter: scrolled ? "blur(12px)" : "none",
-        borderBottom: scrolled ? `1px solid ${C.border}` : "1px solid transparent",
+        background: "rgba(250,249,247,0.72)",
+        backdropFilter: "blur(16px) saturate(140%)",
+        WebkitBackdropFilter: "blur(16px) saturate(140%)",
+        borderBottom: `1px solid rgba(233,230,227,0.75)`,
         transition: "all 0.4s ease",
       }}
       className="fixed top-0 left-0 right-0 z-50"
     >
-      <div className="max-w-[1200px] mx-auto px-6 md:px-12 h-16 flex items-center justify-between">
-        <button
-          onClick={() => onNav("hero")}
-          style={{ fontFamily: "'Inter', sans-serif", fontWeight: 700, fontSize: 16, color: C.text, letterSpacing: "-0.02em", background: "none", border: "none", cursor: "pointer" }}
-          className="hover:opacity-60 transition-opacity"
-        >
-          翁佳欣
-        </button>
+      <div className="max-w-[1200px] mx-auto px-6 md:px-12 h-16 flex items-center justify-end">
         <div className="hidden md:flex items-center gap-8">
           {links.map((l) => (
             <button
               key={l.label}
               onClick={() => onNav(l.href)}
-              style={{ fontSize: 14, color: C.muted, fontFamily: "'Inter', 'Noto Sans SC', sans-serif", background: "none", border: "none", cursor: "pointer" }}
-              className="hover:text-[#111111] transition-colors"
+              style={{ fontSize: 14, color: C.muted, fontFamily: "var(--font-ui)", background: "none", padding: 0, border: "none", cursor: "pointer" }}
+              className="hover:text-[#171717] transition-colors"
             >
               {l.label}
             </button>
           ))}
           <button
             onClick={onOpenContact}
-            style={{ fontSize: 13, fontFamily: "'Inter', sans-serif", background: C.accent, color: "#fff", padding: "7px 18px", borderRadius: 8, fontWeight: 500, border: "none", cursor: "pointer" }}
+            style={{ fontSize: 13, fontFamily: "var(--font-ui)", background: C.text, color: "#fff", padding: "9px 18px", borderRadius: 999, fontWeight: 600, border: "none", cursor: "pointer" }}
             className="hover:opacity-80 transition-opacity"
           >
-            联系我
+            联系方式
           </button>
         </div>
       </div>
@@ -171,21 +167,49 @@ function Nav({ onNav, onOpenContact }: { onNav: (id: string) => void; onOpenCont
 // ─── Hero ─────────────────────────────────────────────────────────────────────
 function Hero() {
   return (
-    <section id="hero" style={{ minHeight: "100vh", background: C.bg }} className="flex items-center">
-      <div className="max-w-[1200px] mx-auto px-6 md:px-12 w-full pt-24 pb-24">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+    <section id="hero" style={{ minHeight: "100vh", background: C.bg, position: "relative", overflow: "hidden" }} className="flex items-center">
+      <div
+        aria-hidden="true"
+        style={{
+          position: "absolute",
+          top: -50,
+          left: -114,
+          width: "clamp(220px, 31vw, 430px)",
+          height: "auto",
+          pointerEvents: "none",
+          zIndex: 0,
+        }}
+      >
+        <img
+          src="/蝴蝶兰.png"
+          alt=""
+          style={{ width: "100%", height: "auto", display: "block", opacity: 0.92 }}
+        />
+        <div
+          style={{
+            position: "absolute",
+            inset: 0,
+            backdropFilter: "blur(7px)",
+            WebkitBackdropFilter: "blur(7px)",
+            background: "linear-gradient(90deg, rgba(250,249,247,0) 22%, rgba(250,249,247,0.2) 58%, rgba(250,249,247,0.46) 100%)",
+            maskImage: "linear-gradient(90deg, transparent 22%, #000 68%, #000 100%)",
+            WebkitMaskImage: "linear-gradient(90deg, transparent 22%, #000 68%, #000 100%)",
+          }}
+        />
+      </div>
+      <div className="max-w-[1280px] mx-auto px-5 md:px-12 w-full pt-28 pb-20" style={{ position: "relative", zIndex: 1 }}>
+        <div className="grid grid-cols-1 lg:grid-cols-[minmax(0,0.92fr)_minmax(420px,0.8fr)] gap-14 lg:gap-24 items-center">
           {/* Left */}
           <div>
             <motion.div initial={{ opacity: 0, y: 32 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.7, delay: 0.2 }}>
               <div style={{ display: "flex", flexDirection: "column", gap: 10, marginBottom: 12 }}>
-                <div style={{ fontSize: "clamp(24px, 3vw, 36px)", color: C.accent, fontWeight: 800, letterSpacing: "0.14em", fontFamily: "'Inter', sans-serif", textTransform: "uppercase" }}>
+                <div style={{ fontSize: "clamp(22px, 3vw, 32px)", color: C.text, fontWeight: 800, letterSpacing: "0.1em", fontFamily: "'Inter', sans-serif", textTransform: "uppercase" }}>
                   翁佳欣
                 </div>
                 <div style={{ fontSize: 14, color: C.muted, fontWeight: 600, letterSpacing: "0.18em", fontFamily: "'Inter', sans-serif", textTransform: "uppercase" }}>
                   产品设计 · 用户体验 · AI 原型
                 </div>
               </div>
-              <SectionLabel text="UI/UX设计师 | 产品实习生" />
             </motion.div>
 
             <motion.h1
@@ -193,17 +217,17 @@ function Hero() {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.7, delay: 0.35 }}
               style={{
-                fontFamily: "'Noto Sans SC', 'Inter', sans-serif",
-                fontSize: "clamp(38px, 5.5vw, 68px)",
-                fontWeight: 700,
-                lineHeight: 1.08,
-                letterSpacing: "-0.02em",
+                fontFamily: "'Smiley Sans', 'HarmonyOS Sans SC', 'MiSans', 'Noto Sans SC', sans-serif",
+                fontSize: "clamp(42px, 6.2vw, 82px)",
+                fontWeight: 800,
+                lineHeight: 1.02,
+                letterSpacing: "-0.05em",
                 color: C.text,
                 marginTop: 20,
                 marginBottom: 16,
               }}
             >
-              让复杂体验，变成清晰好用的界面。
+              让复杂体验，<em style={{ color: C.accent, fontFamily: "inherit", fontWeight: 400, fontStyle: "normal", fontSize: "0.98em", letterSpacing: "-0.04em", WebkitTextStroke: "1px #FFFFFF", textShadow: "0 0 1px rgba(255,255,255,0.9)" }}>变得清晰。</em>
             </motion.h1>
 
             <motion.p
@@ -211,7 +235,7 @@ function Hero() {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.45 }}
               style={{
-                fontSize: "clamp(18px, 2.3vw, 24px)",
+                fontSize: "clamp(18px, 2.1vw, 22px)",
                 color: C.muted,
                 lineHeight: 1.5,
                 fontFamily: "'Noto Sans SC', 'Inter', sans-serif",
@@ -223,50 +247,34 @@ function Hero() {
               我擅长把复杂需求拆成清晰、顺手的界面与体验，长期关注用户思维、交互逻辑与视觉表达。
             </motion.p>
 
-            <motion.p
-              initial={{ opacity: 0, y: 24 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 0.52 }}
-              style={{
-                fontSize: 16,
-                color: C.muted,
-                lineHeight: 1.85,
-                fontFamily: "'Noto Sans SC', 'Inter', sans-serif",
-                maxWidth: 460,
-                marginBottom: 40,
-              }}
-            >
-              以 UI / UX 设计为主，兼顾产品思维与协作落地，致力于做出更容易被理解、被使用的产品体验。
-            </motion.p>
-
             <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5, delay: 0.65 }} className="flex flex-wrap gap-3">
               <a
                 href="#works"
-                style={{ background: C.text, color: "#fff", padding: "12px 28px", borderRadius: 999, fontWeight: 600, fontSize: 15, fontFamily: "'Noto Sans SC', 'Inter', sans-serif", display: "inline-block", textDecoration: "none" }}
+                style={{ background: C.accent, color: "#fff", padding: "13px 24px", borderRadius: 999, fontWeight: 600, fontSize: 15, fontFamily: "var(--font-ui)", display: "inline-block", textDecoration: "none" }}
                 className="hover:opacity-80 transition-opacity"
               >
                 查看作品集
               </a>
               <a
-                href="/简历-设计.pdf"
+                href="/简历.pdf"
                 target="_blank"
                 rel="noreferrer"
-                style={{ border: `1.5px solid ${C.border}`, color: C.text, padding: "12px 28px", borderRadius: 999, fontWeight: 500, fontSize: 15, fontFamily: "'Noto Sans SC', 'Inter', sans-serif", display: "inline-block", textDecoration: "none" }}
-                className="hover:border-[#6366F1] hover:text-[#6366F1] transition-all"
+                style={{ background: "#fff", border: `1px solid ${C.accent}`, color: C.accent, padding: "13px 24px", borderRadius: 999, fontWeight: 500, fontSize: 15, fontFamily: "var(--font-ui)", display: "inline-block", textDecoration: "none" }}
+                className="hover:bg-[#FFA3E0] hover:text-white transition-colors"
               >
                 获取简历
               </a>
             </motion.div>
 
-            <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.9 }} className="flex flex-wrap gap-4 mt-12">
+            <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.9 }} className="flex flex-wrap gap-8 mt-16 pt-5 border-t border-[#E9E6E3]">
               {[
-                { n: "UI", l: "UI / UX 用户思维" },
+                { n: "产品设计", l: "UI / UX 用户思维" },
                 { n: "3", l: "完整项目案例" },
                 { n: "Figma", l: "原型与协作" },
               ].map((s) => (
-                <div key={s.l} style={{ background: "rgba(255,255,255,0.75)", border: `1px solid ${C.border}`, borderRadius: 24, padding: "14px 16px", minWidth: 140, boxShadow: "0 12px 30px rgba(0,0,0,0.05)" }}>
+                <div key={s.l} style={{ minWidth: 120 }}>
                   <div style={{ fontSize: 22, fontWeight: 700, color: C.text, fontFamily: "'Inter', sans-serif", lineHeight: 1 }}>{s.n}</div>
-                  <div style={{ fontSize: 12, color: C.muted, marginTop: 6, fontFamily: "'Noto Sans SC', sans-serif" }}>{s.l}</div>
+                  <div style={{ fontSize: 12, color: s.l === "UI / UX 用户思维" ? C.accent : C.muted, marginTop: 6, fontFamily: "'Noto Sans SC', sans-serif" }}>{s.l}</div>
                 </div>
               ))}
             </motion.div>
@@ -280,23 +288,13 @@ function Hero() {
             className="hidden lg:flex justify-center items-center"
           >
             <div style={{ position: "relative" }}>
-              {/* Background blob */}
-              <div
-                style={{
-                  position: "absolute",
-                  inset: -24,
-                  borderRadius: "60% 40% 50% 60% / 50% 60% 40% 50%",
-                  background: `${C.accent}0D`,
-                  zIndex: 0,
-                }}
-              />
               <div
                 style={{
                   width: 460,
                   height: 560,
                   borderRadius: 32,
                   overflow: "hidden",
-                  boxShadow: "0 32px 80px rgba(0,0,0,0.14)",
+                  boxShadow: "0 24px 60px rgba(20,20,20,0.12)",
                   border: `1px solid ${C.border}`,
                   position: "relative",
                   zIndex: 1,
@@ -317,8 +315,8 @@ function Hero() {
                   position: "absolute",
                   bottom: -16,
                   right: -24,
-                  background: "#fff",
-                  borderRadius: 14,
+                    background: C.accent,
+                    borderRadius: 999,
                   padding: "14px 20px",
                   boxShadow: C.shadow,
                   border: `1px solid ${C.border}`,
@@ -349,11 +347,11 @@ function About() {
         <Reveal>
           <SectionLabel text="关于我" />
           <h2 style={{ fontFamily: "'Noto Sans SC', 'Inter', sans-serif", fontSize: "clamp(32px, 4vw, 48px)", fontWeight: 700, letterSpacing: "-0.01em", color: C.text, marginTop: 12, marginBottom: 16, lineHeight: 1.2 }}>
-            以用户思维，做更清晰好用的界面体验。
+            以<span style={{ color: C.accent }}>用户思维</span>，做更清晰好用的界面体验。
           </h2>
           <p style={{ fontSize: 16, color: C.muted, lineHeight: 1.85, maxWidth: 620, fontFamily: "'Noto Sans SC', 'Inter', sans-serif", marginBottom: 56 }}>
             中南大学产品设计专业在读，曾在
-            <strong style={{ color: C.text }}>海艺 AI</strong>
+            <strong style={{ color: C.text }}>海艺 AI、伊鸿健康</strong>
             接触产品实习与真实业务场景，持续打磨从用户研究到界面落地的完整思考路径。
             我更关注用户行为、信息层级与界面效率，让复杂需求变成清晰且可被轻松使用的体验。
           </p>
@@ -388,6 +386,7 @@ interface Project {
   summary: string;
   image: string;
   accent: string;
+  frameColor: string;
   tier: 1 | 2 | 3;
 }
 
@@ -400,7 +399,8 @@ const PROJECTS: Project[] = [
     tags: ["多人协作", "决策流程", "信息架构", "用户旅程"],
     summary: "多人出行的核心问题不是信息缺失，而是决策不可见。将混乱的群聊决策转化为结构化的协作流程。",
     image: "yiqichufa",
-    accent: "#10B981",
+    accent: "#16A878",
+    frameColor: "#DDF5EC",
     tier: 1,
   },
   {
@@ -411,7 +411,8 @@ const PROJECTS: Project[] = [
     tags: ["B2B SaaS", "权限体系", "AI 需求文档", "全流程交付"],
     summary: "端到端活动运营平台，涵盖多角色权限管理、实时应急响应与 AI 辅助 PRD 生成，从零到部署上线。",
     image: "eventos",
-    accent: "#F97316",
+    accent: "#F28B45",
+    frameColor: "#FDE1D0",
     tier: 2,
   },
   {
@@ -422,7 +423,8 @@ const PROJECTS: Project[] = [
     tags: ["行为设计", "习惯养成", "个人效率"],
     summary: "将时间重新定义为个人资产而非日历资源，帮助用户提升对时间的感知力与管理意识。",
     image: "timeapp",
-    accent: "#8B5CF6",
+    accent: "#9D80D8",
+    frameColor: "#E7DDF7",
     tier: 3,
   },
 ];
@@ -436,33 +438,21 @@ function getImg(id: string) {
 // ─── Works section ────────────────────────────────────────────────────────────
 function Works({ onOpenProject }: { onOpenProject: (id: string) => void }) {
   return (
-    <section id="works" style={{ background: "#fff", paddingTop: 120, paddingBottom: 120 }}>
+    <section id="works" style={{ background: "#fff", paddingTop: 140, paddingBottom: 140 }}>
       <div className="max-w-[1200px] mx-auto px-6 md:px-12">
         <Reveal>
           <SectionLabel text="精选作品" />
-          <h2 style={{ fontFamily: "'Noto Sans SC', 'Inter', sans-serif", fontSize: "clamp(32px, 4vw, 48px)", fontWeight: 700, letterSpacing: "-0.01em", color: C.text, marginTop: 12, marginBottom: 60 }}>
-            值得被看见的作品。
+          <h2 style={{ fontFamily: "'Noto Sans SC', 'Inter', sans-serif", fontSize: "clamp(32px, 4vw, 48px)", fontWeight: 700, letterSpacing: "-0.01em", color: C.text, marginTop: 12, marginBottom: 64, lineHeight: 1.2 }}>
+            把思考，<span style={{ color: C.accent }}>做成作品。</span>
           </h2>
         </Reveal>
 
-        {/* Tier 1 */}
-        <Reveal delay={0.05}>
-          <button
-            onClick={() => onOpenProject(PROJECTS[0].id)}
-            className="w-full text-left group"
-            style={{ background: "none", border: "none", padding: 0, cursor: "pointer" }}
-          >
-            <ProjectCard project={PROJECTS[0]} large />
-          </button>
-        </Reveal>
-
-        {/* Tier 2 + 3 */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
-          {PROJECTS.slice(1).map((p, i) => (
-            <Reveal key={p.id} delay={0.1 + i * 0.08}>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-10">
+          {PROJECTS.map((p, i) => (
+            <Reveal key={p.id} delay={0.05 + i * 0.08}>
               <button
                 onClick={() => onOpenProject(p.id)}
-                className="w-full text-left group"
+                className="w-full h-full text-left group"
                 style={{ background: "none", border: "none", padding: 0, cursor: "pointer" }}
               >
                 <ProjectCard project={p} />
@@ -475,48 +465,46 @@ function Works({ onOpenProject }: { onOpenProject: (id: string) => void }) {
   );
 }
 
-function ProjectCard({ project, large }: { project: Project; large?: boolean }) {
+function ProjectCard({ project }: { project: Project }) {
   return (
     <div
       style={{
-        background: "rgba(255, 255, 255, 0.12)",
-        backdropFilter: "blur(24px)",
-        WebkitBackdropFilter: "blur(24px)",
-        borderRadius: 28,
+        background: project.frameColor,
+        borderRadius: 18,
         overflow: "hidden",
-        border: `1px solid rgba(255,255,255,0.45)`,
-        boxShadow: "0 28px 90px rgba(15,23,42,0.16)",
-        transition: "all 0.4s ease",
+        border: `2px solid ${project.frameColor}`,
+        boxShadow: `0 14px 28px ${project.frameColor}99`,
+        transition: "transform 0.3s ease, box-shadow 0.3s ease",
         display: "block",
         width: "100%",
+        position: "relative",
       }}
-      className="group-hover:-translate-y-2 group-hover:shadow-2xl transition-all"
+      className="group-hover:scale-[1.025] group-hover:shadow-2xl transition-all"
     >
-      <div style={{ overflow: "hidden", height: large ? 400 : 260, background: "rgba(255,255,255,0.12)" }}>
+      <div style={{ position: "absolute", top: 7, right: 12, zIndex: 2, color: project.accent, fontSize: 22, lineHeight: 1, textShadow: "0 1px 0 rgba(255,255,255,0.8)" }}>✦</div>
+      <div style={{ padding: 10, paddingBottom: 0 }}>
+        <div style={{ overflow: "hidden", height: 270, background: "#F5F3F0", borderRadius: "10px 10px 2px 2px", border: "1px solid rgba(23,23,23,0.08)" }}>
         <ImageWithFallback
           src={getImg(project.image)}
           alt={project.title}
           className="w-full h-full object-cover object-top group-hover:scale-[1.03] transition-transform duration-700"
         />
+        </div>
       </div>
-      <div style={{ padding: large ? "32px 32px" : "24px 24px", background: "rgba(255,255,255,0.14)", backdropFilter: "blur(18px)", WebkitBackdropFilter: "blur(18px)" }}>
-        <div className="flex flex-wrap gap-2 mb-4">
-          {project.tags.map((t) => (
-            <span key={t} style={{ fontSize: 11, fontWeight: 600, color: project.accent, background: `${project.accent}14`, borderRadius: 6, padding: "3px 10px", letterSpacing: "0.04em", fontFamily: "'Noto Sans SC', 'Inter', sans-serif" }}>
-              {t}
+      <div style={{ padding: "22px 22px 24px", background: "#fff", margin: "10px", marginTop: 0, borderRadius: "2px 2px 10px 10px", minHeight: 210 }}>
+        <div style={{ fontSize: 22, fontWeight: 800, color: C.text, fontFamily: "'Noto Sans SC', 'Inter', sans-serif", letterSpacing: "-0.01em", marginBottom: 6 }}>
+          {project.title}
+        </div>
+        <div style={{ fontSize: 13, color: C.muted, lineHeight: 1.6, fontFamily: "'Noto Sans SC', sans-serif" }}>{project.subtitle}</div>
+        <div className="flex flex-wrap gap-2" style={{ marginTop: 16, height: 48, alignContent: "flex-start", overflow: "hidden" }}>
+          {project.tags.map((tag) => (
+            <span key={tag} style={{ fontSize: 11, color: project.accent, background: project.frameColor, borderRadius: 7, padding: "5px 10px", lineHeight: 1.2, fontWeight: 600 }}>
+              {tag}
             </span>
           ))}
         </div>
-        <div style={{ fontSize: large ? 26 : 20, fontWeight: 700, color: C.text, fontFamily: "'Noto Sans SC', 'Inter', sans-serif", letterSpacing: "-0.01em", marginBottom: 6 }}>
-          {project.title}
-        </div>
-        <div style={{ fontSize: 13, color: C.muted, marginBottom: 12, fontFamily: "'Noto Sans SC', sans-serif" }}>{project.subtitle}</div>
-        <p style={{ fontSize: 14, color: C.muted, lineHeight: 1.8, fontFamily: "'Noto Sans SC', 'Inter', sans-serif", marginBottom: 16 }}>{project.summary}</p>
-        <div className="flex items-center justify-between">
-          <span style={{ fontSize: 12, color: C.muted, fontFamily: "'Noto Sans SC', sans-serif" }}>担任角色 — {project.role}</span>
-          <span style={{ fontSize: 13, color: project.accent, fontWeight: 600, fontFamily: "'Noto Sans SC', 'Inter', sans-serif" }} className="group-hover:gap-2 transition-all">
-            查看详情 →
-          </span>
+        <div style={{ display: "flex", justifyContent: "flex-end", alignItems: "center", marginTop: 12, color: project.accent, fontSize: 13, fontWeight: 700 }}>
+          <span>查看详情 →</span>
         </div>
       </div>
     </div>
@@ -527,20 +515,28 @@ function ProjectCard({ project, large }: { project: Project; large?: boolean }) 
 function Experience() {
   const items = [
     {
+      period: "2026.07 – 2026.09",
+      company: "伊鸿健康",
+      role: "产品实习生",
+      points: [
+        "需求挖掘管理：参与两款医疗软件迭代，对接业务需求，完成 15 + 项需求规划",
+        "产品方案设计：重构业务操作链路，完善信息管理功能，输出产品文档",
+        "跨职能推进上线：跟进产品全流程落地，协调团队问题，更新产品手册",
+      ],
+    },
+    {
       period: "2026.01 – 2026.03",
       company: "海艺 AI",
       role: "产品实习生",
       points: [
-        "负责 Web 端 AI App 功能开发与迭代，主导功能分析与版本规划",
-        "交互优化迭代：优化 Web 端粒子分享弹窗及多个页面的交互反馈与信息层级",
-        "界面设计迭代：独立完成角色免审功能，输出高保真原型及完整设计说明文档",
-        "设计协作：提前共享设计文档并持续跟进上线，协助处理设计与开发对接问题",
-        "全程参与跨职能协作，覆盖需求分析、原型设计、评审迭代至产品交付全流程",
+        "用户分析与问题研判：梳理产品使用问题，分析用户路径，排定需求优先级，输出需求材料与业务流程图",
+        "功能设计：完成 3 项功能从 0 到 1 设计，输出原型与产品文档，根据评审迭代方案",
+        "跨职能协同与落地：对接各团队，跟进研发上线，基于反馈迭代优化",
       ],
     },
     {
       period: "2024.09 – 2025.06",
-      company: "学生会合作发展部",
+      company: "学生会办公室部",
       role: "部长",
       points: [
         "统筹团队与资源管理，提升团队协作效率与项目目标完成率",
@@ -557,7 +553,7 @@ function Experience() {
         <Reveal>
           <SectionLabel text="工作经历" />
           <h2 style={{ fontFamily: "'Noto Sans SC', 'Inter', sans-serif", fontSize: "clamp(32px, 4vw, 48px)", fontWeight: 700, letterSpacing: "-0.01em", color: C.text, marginTop: 12, marginBottom: 64 }}>
-            我的成长轨迹。
+            我的<span style={{ color: C.accent }}>成长轨迹。</span>
           </h2>
         </Reveal>
 
@@ -592,10 +588,10 @@ function Experience() {
 // ─── Skills ───────────────────────────────────────────────────────────────────
 function Skills() {
   const groups = [
-    { label: "设计工具", color: "#F59E0B", items: ["Figma", "Figma Make", "剪映", "Rhino", "Keyshot"] },
-    { label: "用户体验", color: "#10B981", items: ["用户研究", "信息架构", "交互设计", "用户旅程地图", "原型设计"] },
-    { label: "产品", color: "#6366F1", items: ["需求分析", "PRD 撰写", "产品规划", "业务流程设计", "产品架构"] },
-    { label: "AI 工作流", color: "#8B5CF6", items: ["ChatGPT", "Claude Code", "Google AI Studio", "VSCode", "Codex", "Prompt Engineering"] },
+    { label: "设计工具", color: "#F06A8A", items: ["Figma", "Figma Make", "剪映", "Rhino", "Keyshot"] },
+    { label: "用户体验", color: "#F58BB2", items: ["用户研究", "信息架构", "交互设计", "用户旅程地图", "原型设计"] },
+    { label: "产品", color: "#E978B8", items: ["需求分析", "PRD 撰写", "产品规划", "业务流程设计", "产品架构"] },
+    { label: "AI 工作流", color: "#B982D9", items: ["ChatGPT", "Google AI Studio", "Codex", "Prompt Engineering"] },
   ];
 
   return (
@@ -604,14 +600,14 @@ function Skills() {
         <Reveal>
           <SectionLabel text="专业技能" />
           <h2 style={{ fontFamily: "'Noto Sans SC', 'Inter', sans-serif", fontSize: "clamp(32px, 4vw, 48px)", fontWeight: 700, letterSpacing: "-0.01em", color: C.text, marginTop: 12, marginBottom: 64 }}>
-            我能带来什么。
+            我<span style={{ color: C.accent }}>掌握</span>了什么。
           </h2>
         </Reveal>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           {groups.map((g, i) => (
             <Reveal key={g.label} delay={i * 0.08}>
               <div style={{ background: "#fff", borderRadius: 16, padding: "28px 28px", border: `1px solid ${C.border}` }}>
-                <div style={{ fontSize: 11, fontWeight: 700, color: g.color, letterSpacing: "0.1em", fontFamily: "'Noto Sans SC', 'Inter', sans-serif", marginBottom: 16 }}>
+                <div style={{ fontSize: 13, fontWeight: 700, color: g.color, letterSpacing: "0.1em", fontFamily: "'Noto Sans SC', 'Inter', sans-serif", marginBottom: 16 }}>
                   {g.label}
                 </div>
                 <div className="flex flex-wrap gap-2">
@@ -637,20 +633,16 @@ function Contact() {
       <div className="max-w-[1200px] mx-auto px-6 md:px-12">
         <Reveal>
           <div style={{ maxWidth: 640 }}>
-            <div style={{ fontSize: 11, color: "rgba(255,255,255,0.4)", letterSpacing: "0.12em", fontWeight: 600, fontFamily: "'Inter', sans-serif", marginBottom: 20 }}>联系我</div>
+            <div style={{ fontSize: 15, color: "rgba(255,255,255,0.55)", letterSpacing: "0.12em", fontWeight: 600, fontFamily: "'Inter', sans-serif", marginBottom: 20 }}>CONTACT</div>
             <h2 style={{ fontFamily: "'Noto Sans SC', 'Inter', sans-serif", fontSize: "clamp(36px, 5vw, 64px)", fontWeight: 700, color: "#fff", lineHeight: 1.1, letterSpacing: "-0.02em", marginBottom: 20 }}>
               期待一起
               <br />
               做有意义的产品。
             </h2>
-            <p style={{ fontSize: 16, color: "rgba(255,255,255,0.5)", lineHeight: 1.85, fontFamily: "'Noto Sans SC', 'Inter', sans-serif", marginBottom: 48 }}>
-              始终对产品、系统与有价值的用户体验保持好奇。
-              欢迎产品经理 / UX 设计师实习机会咨询。
-            </p>
             <div className="flex flex-wrap gap-4 mb-16">
               <a
                 href="mailto:1269383427@qq.com"
-                style={{ background: "linear-gradient(135deg, #6366F1, #8B5CF6)", color: "#fff", padding: "14px 20px", borderRadius: 16, fontWeight: 600, fontSize: 15, fontFamily: "'Noto Sans SC', 'Inter', sans-serif", display: "inline-flex", alignItems: "center", gap: 8, textDecoration: "none", boxShadow: "0 16px 40px rgba(99,102,241,0.3)" }}
+                style={{ background: C.accent, color: "#fff", padding: "14px 20px", borderRadius: 999, fontWeight: 600, fontSize: 15, fontFamily: "var(--font-ui)", display: "inline-flex", alignItems: "center", gap: 8, textDecoration: "none", boxShadow: C.shadow }}
                 className="hover:translate-y-[-2px] transition-transform"
               >
                 <span style={{ fontSize: 14, fontWeight: 700 }}>邮箱</span>
@@ -658,14 +650,14 @@ function Contact() {
               </a>
               <a
                 href="tel:15872692052"
-                style={{ border: "1.5px solid rgba(255,255,255,0.15)", color: "rgba(255,255,255,0.8)", padding: "14px 20px", borderRadius: 16, fontWeight: 500, fontSize: 15, fontFamily: "'Noto Sans SC', 'Inter', sans-serif", display: "inline-flex", alignItems: "center", gap: 8, textDecoration: "none", background: "rgba(255,255,255,0.06)" }}
-                className="hover:border-white hover:text-white transition-all"
+                style={{ background: C.accent, color: "#fff", padding: "14px 20px", borderRadius: 999, fontWeight: 500, fontSize: 15, fontFamily: "var(--font-ui)", display: "inline-flex", alignItems: "center", gap: 8, textDecoration: "none", boxShadow: C.shadow }}
+                className="hover:opacity-80 transition-opacity"
               >
                 <span style={{ fontSize: 14, fontWeight: 700 }}>电话</span>
                 <span>15872692052</span>
               </a>
               <div
-                style={{ border: "1.5px solid rgba(255,255,255,0.15)", color: "rgba(255,255,255,0.8)", padding: "14px 20px", borderRadius: 16, fontWeight: 500, fontSize: 15, fontFamily: "'Noto Sans SC', 'Inter', sans-serif", display: "inline-flex", alignItems: "center", gap: 8, background: "rgba(255,255,255,0.06)" }}
+                style={{ background: C.accent, color: "#fff", padding: "14px 20px", borderRadius: 999, fontWeight: 500, fontSize: 15, fontFamily: "var(--font-ui)", display: "inline-flex", alignItems: "center", gap: 8, boxShadow: C.shadow }}
               >
                 <span style={{ fontSize: 14, fontWeight: 700 }}>微信</span>
                 <span>thriving-67</span>
@@ -692,13 +684,13 @@ function BackButton({ onBack }: { onBack: () => void }) {
         top: 20,
         left: 24,
         zIndex: 100,
-        background: "#fff",
-        border: `1px solid ${C.border}`,
+        background: C.accent,
+        border: `1px solid ${C.accent}`,
         borderRadius: 10,
         padding: "8px 18px",
         fontSize: 14,
         fontWeight: 500,
-        color: C.text,
+        color: "#fff",
         fontFamily: "'Noto Sans SC', 'Inter', sans-serif",
         cursor: "pointer",
         boxShadow: C.shadow,
@@ -706,7 +698,7 @@ function BackButton({ onBack }: { onBack: () => void }) {
         alignItems: "center",
         gap: 6,
       }}
-      className="hover:border-[#6366F1] hover:text-[#6366F1] transition-all"
+      className="hover:opacity-80 transition-opacity"
     >
       ← 返回
     </button>
@@ -775,6 +767,19 @@ function ProjectQuickNav({ current, onOpenProject }: { current: string; onOpenPr
 
 // ── EventOS Detail ────────────────────────────────────────────────────────────
 function EventosDetail({ onBack, onOpenProject }: { onBack: () => void; onOpenProject: (id: string) => void }) {
+  const eventosUrl = "https://eventos-zeta-khaki.vercel.app/";
+  const [copied, setCopied] = useState(false);
+
+  const copyEventosUrl = async () => {
+    try {
+      await navigator.clipboard.writeText(eventosUrl);
+      setCopied(true);
+      window.setTimeout(() => setCopied(false), 1800);
+    } catch {
+      setCopied(false);
+    }
+  };
+
   return (
     <div style={{ background: C.bg, minHeight: "100vh", fontFamily: "'Noto Sans SC', 'Inter', sans-serif" }}>
       <BackButton onBack={onBack} />
@@ -789,11 +794,13 @@ function EventosDetail({ onBack, onOpenProject }: { onBack: () => void; onOpenPr
                 这是一个面向活动运营的智能协作平台，通过结构化权限与数据展示，让运营人员在复杂现场中保持对节点与风险的可控。
               </div>
             </div>
-            <div style={{ background: "#F9731610", borderRadius: 18, padding: "22px 24px", marginTop: 18, border: "1px solid rgba(249,115,22,0.16)" }}>
-              <div style={{ fontSize: 13, color: "#F97316", fontWeight: 700, letterSpacing: "0.12em", textTransform: "uppercase", marginBottom: 10 }}>核心洞察</div>
-              <div style={{ fontSize: 18, color: C.text, lineHeight: 1.8 }}>
-                AI 原生业务的价值不在于功能堆叠，而在于让“谁该看到什么”变得透明、可控、可响应。合理的权限与信息流比界面呈现更先行。
-              </div>
+            <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", flexWrap: "wrap", gap: 16, background: "#FFF4EC", borderRadius: 18, padding: "18px 20px", marginTop: 18, border: "1px solid #FAD7C1" }}>
+              <a href={eventosUrl} target="_blank" rel="noreferrer" style={{ color: "#F97316", fontSize: 15, fontWeight: 700, textDecoration: "none", wordBreak: "break-all" }}>
+                {eventosUrl}
+              </a>
+              <button onClick={copyEventosUrl} style={{ flexShrink: 0, background: "#F97316", border: "none", borderRadius: 999, color: "#fff", padding: "9px 16px", fontSize: 13, fontWeight: 700, cursor: "pointer" }}>
+                {copied ? "已复制" : "一键复制链接"}
+              </button>
             </div>
           </div>
         </Reveal>
@@ -820,19 +827,6 @@ function EventosDetail({ onBack, onOpenProject }: { onBack: () => void; onOpenPr
             </Reveal>
           ))}
         </div>
-
-        {/* Reflection */}
-        <Reveal>
-          <div style={{ background: "#fff", borderRadius: 20, padding: "40px 40px", border: `1px solid ${C.border}` }}>
-            <SectionLabel text="项目复盘" />
-            <h3 style={{ fontSize: 24, fontWeight: 700, color: C.text, margin: "12px 0 16px" }}>这个项目让我学到了什么</h3>
-            <p style={{ fontSize: 15, color: C.muted, lineHeight: 1.9 }}>
-              EventOS 是我第一次以产品负责人视角完整主导一个 B2B 产品的设计与交付。
-              权限体系的设计让我深刻理解：产品架构决策往往比界面设计影响更深远。
-              AI 辅助工作流的引入也让我意识到，工具的价值不在于替代思考，而在于加速从想法到验证的路径。
-            </p>
-          </div>
-        </Reveal>
 
         <ProjectQuickNav current="eventos" onOpenProject={onOpenProject} />
       </div>
@@ -889,18 +883,6 @@ function YiqichufaDetail({ onBack, onOpenProject }: { onBack: () => void; onOpen
           ))}
         </div>
 
-        <Reveal>
-          <div style={{ background: "#fff", borderRadius: 20, padding: "40px 40px", border: `1px solid ${C.border}` }}>
-            <SectionLabel text="项目复盘" />
-            <h3 style={{ fontSize: 24, fontWeight: 700, color: C.text, margin: "12px 0 16px" }}>把「不可见的决策」变成可见的协作</h3>
-            <p style={{ fontSize: 15, color: C.muted, lineHeight: 1.9 }}>
-              这个项目让我第一次真正意识到：产品设计的核心不是「界面好不好看」，而是「流程是否合理」。
-              多人协作场景下，信息架构的合理性直接决定了用户能否顺畅完成任务。
-              整个过程中，我学会了如何在需求模糊、用户目标分散的情况下，提炼出可落地的产品主线。
-            </p>
-          </div>
-        </Reveal>
-
         <ProjectQuickNav current="yiqichufa" onOpenProject={onOpenProject} />
       </div>
     </div>
@@ -950,19 +932,6 @@ function TimeAppDetail({ onBack, onOpenProject }: { onBack: () => void; onOpenPr
           ))}
         </div>
 
-        <Reveal>
-          <div style={{ background: "#fff", borderRadius: 20, padding: "40px 40px", border: `1px solid ${C.border}` }}>
-            <SectionLabel text="项目复盘" />
-            <h3 style={{ fontSize: 24, fontWeight: 700, color: C.text, margin: "12px 0 16px" }}>重新定义「时间管理」的底层逻辑</h3>
-            <p style={{ fontSize: 15, color: C.muted, lineHeight: 1.9 }}>
-              这个项目让我思考：大多数时间管理工具都在解决「执行」问题，却忽视了「认知」问题——
-              用户根本不知道自己的时间去哪了。
-              通过将时间可视化为「资产」，我尝试改变用户的心智模型，
-              让「时间感知」成为习惯的起点，而非任务完成后的附属功能。
-            </p>
-          </div>
-        </Reveal>
-
         <ProjectQuickNav current="timeapp" onOpenProject={onOpenProject} />
       </div>
     </div>
@@ -993,18 +962,20 @@ function MainPage({ onOpenProject, onOpenContact }: { onOpenProject: (id: string
 export default function App() {
   const [page, setPage] = useState<"main" | string>("main");
   const [contactOpen, setContactOpen] = useState(false);
+  const mainScrollPosition = useRef(0);
 
   const openProject = (id: string) => {
+    if (page === "main") {
+      mainScrollPosition.current = window.scrollY;
+    }
     setPage(id);
     window.scrollTo({ top: 0, behavior: "instant" });
   };
 
   const goBack = () => {
     setPage("main");
-    window.scrollTo({ top: 0, behavior: "instant" });
     setTimeout(() => {
-      const el = document.getElementById("works");
-      if (el) el.scrollIntoView({ behavior: "smooth" });
+      window.scrollTo({ top: mainScrollPosition.current, behavior: "instant" });
     }, 100);
   };
 
