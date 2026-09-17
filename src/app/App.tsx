@@ -406,7 +406,7 @@ const PROJECTS: Project[] = [
   {
     id: "eventos",
     title: "EventOS",
-    subtitle: "AI 原生 To B Web · 智能活动运营管理平台",
+    subtitle: "AI Native To B Web",
     role: "产品负责人",
     tags: ["B2B SaaS", "权限体系", "AI 需求文档", "全流程交付"],
     summary: "端到端活动运营平台，涵盖多角色权限管理、实时应急响应与 AI 辅助 PRD 生成，从零到部署上线。",
@@ -493,10 +493,9 @@ function ProjectCard({ project }: { project: Project }) {
         </div>
       </div>
       <div style={{ padding: "22px 22px 24px", background: "#fff", margin: "10px", marginTop: 0, borderRadius: "2px 2px 10px 10px", minHeight: 210 }}>
-        <div style={{ fontSize: 22, fontWeight: 800, color: C.text, fontFamily: "'Noto Sans SC', 'Inter', sans-serif", letterSpacing: "-0.01em", marginBottom: 6 }}>
-          {project.title}
+        <div style={{ fontSize: 18, fontWeight: 800, color: C.text, fontFamily: "'Noto Sans SC', 'Inter', sans-serif", letterSpacing: "-0.01em", marginBottom: 6, lineHeight: 1.5 }}>
+          <span style={{ color: project.accent }}>{project.title}</span> · {project.subtitle}
         </div>
-        <div style={{ fontSize: 13, color: C.muted, lineHeight: 1.6, fontFamily: "'Noto Sans SC', sans-serif" }}>{project.subtitle}</div>
         <div className="flex flex-wrap gap-2" style={{ marginTop: 16, height: 48, alignContent: "flex-start", overflow: "hidden" }}>
           {project.tags.map((tag) => (
             <span key={tag} style={{ fontSize: 11, color: project.accent, background: project.frameColor, borderRadius: 7, padding: "5px 10px", lineHeight: 1.2, fontWeight: 600 }}>
@@ -789,8 +788,7 @@ function EventosDetail({ onBack, onOpenProject }: { onBack: () => void; onOpenPr
         <Reveal>
           <div style={{ background: "rgba(255,255,255,0.9)", borderRadius: 24, padding: "30px 36px", border: `1px solid ${C.border}`, boxShadow: "0 24px 80px rgba(15,23,42,0.08)", marginBottom: 56 }}>
             <div style={{ marginBottom: 14 }}>
-              <div style={{ fontSize: 12, textTransform: "uppercase", letterSpacing: "0.18em", color: "#F97316", fontWeight: 700, marginBottom: 10 }}>EventOS</div>
-              <div style={{ fontSize: "clamp(28px, 4vw, 48px)", fontWeight: 800, color: C.text, lineHeight: 1.05, marginBottom: 12 }}>AI 原生 To B Web · 智能活动运营管理平台</div>
+              <div style={{ fontSize: "clamp(24px, 3.5vw, 40px)", fontWeight: 800, color: C.text, lineHeight: 1.1, marginBottom: 12 }}><span style={{ color: "#F97316" }}>EventOS</span> · AI Native To B Web</div>
               <div style={{ fontSize: 15, color: C.muted, maxWidth: 760, lineHeight: 1.8 }}>
                 这是一个面向活动运营的智能协作平台，通过结构化权限与数据展示，让运营人员在复杂现场中保持对节点与风险的可控。
               </div>
@@ -845,8 +843,7 @@ function YiqichufaDetail({ onBack, onOpenProject }: { onBack: () => void; onOpen
         <Reveal>
           <div style={{ background: "rgba(255,255,255,0.9)", borderRadius: 24, padding: "30px 36px", border: `1px solid ${C.border}`, boxShadow: "0 24px 80px rgba(15,23,42,0.08)", marginBottom: 56 }}>
             <div style={{ marginBottom: 14 }}>
-              <div style={{ fontSize: 12, textTransform: "uppercase", letterSpacing: "0.18em", color: "#10B981", fontWeight: 700, marginBottom: 10 }}>一起出发</div>
-              <div style={{ fontSize: "clamp(28px, 4vw, 48px)", fontWeight: 800, color: C.text, lineHeight: 1.05, marginBottom: 12 }}>多人旅行协作决策平台</div>
+              <div style={{ fontSize: "clamp(24px, 3.5vw, 40px)", fontWeight: 800, color: C.text, lineHeight: 1.1, marginBottom: 12 }}><span style={{ color: "#10B981" }}>一起出发</span> · 多人旅行协作决策平台</div>
               <div style={{ fontSize: 15, color: C.muted, maxWidth: 760, lineHeight: 1.8 }}>
                 将群聊决策转化为结构化协作流程，让决策路径可视、角色分工明确，减少“我不知道大家想法”的旅行不确定性。
               </div>
@@ -900,8 +897,7 @@ function TimeAppDetail({ onBack, onOpenProject }: { onBack: () => void; onOpenPr
         <Reveal>
           <div style={{ background: "rgba(255,255,255,0.9)", borderRadius: 24, padding: "30px 36px", border: `1px solid ${C.border}`, boxShadow: "0 24px 80px rgba(15,23,42,0.08)", marginBottom: 56 }}>
             <div style={{ marginBottom: 14 }}>
-              <div style={{ fontSize: 12, textTransform: "uppercase", letterSpacing: "0.18em", color: "#8B5CF6", fontWeight: 700, marginBottom: 10 }}>时域</div>
-              <div style={{ fontSize: "clamp(28px, 4vw, 48px)", fontWeight: 800, color: C.text, lineHeight: 1.05, marginBottom: 12 }}>时域 · 个人时间资产管理工具</div>
+              <div style={{ fontSize: "clamp(24px, 3.5vw, 40px)", fontWeight: 800, color: C.text, lineHeight: 1.1, marginBottom: 12 }}><span style={{ color: "#8B5CF6" }}>时域</span> · 个人时间资产管理工具</div>
               <div style={{ fontSize: 15, color: C.muted, maxWidth: 760, lineHeight: 1.8 }}>
                 这个项目把时间从“日历格子”转为“个人资产”，帮助用户看见自己的时间分配并形成更清晰的使用路径。
               </div>
