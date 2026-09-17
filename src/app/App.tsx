@@ -417,12 +417,12 @@ const PROJECTS: Project[] = [
   },
   {
     id: "timeapp",
-    title: "时间 APP",
+    title: "时域",
     subtitle: "个人时间资产管理工具",
     role: "产品设计师",
     tags: ["行为设计", "习惯养成", "个人效率"],
     summary: "将时间重新定义为个人资产而非日历资源，帮助用户提升对时间的感知力与管理意识。",
-    image: "timeapp",
+    image: "shiyu",
     accent: "#9D80D8",
     frameColor: "#E7DDF7",
     tier: 3,
@@ -432,6 +432,7 @@ const PROJECTS: Project[] = [
 function getImg(id: string) {
   if (id === "eventos") return eventosImg;
   if (id === "yiqichufa") return yiqichufaImg;
+  if (id === "shiyu") return "/时域.png";
   return timeAppImg;
 }
 
@@ -729,7 +730,7 @@ function ProjectQuickNav({ current, onOpenProject }: { current: string; onOpenPr
   const items = [
     { id: "yiqichufa", label: "一起出发", accent: "#10B981" },
     { id: "eventos", label: "EventOS", accent: "#F97316" },
-    { id: "timeapp", label: "时间 APP", accent: "#8B5CF6" },
+    { id: "timeapp", label: "时域", accent: "#8B5CF6" },
   ].filter((item) => item.id !== current);
 
   return (
@@ -889,7 +890,7 @@ function YiqichufaDetail({ onBack, onOpenProject }: { onBack: () => void; onOpen
   );
 }
 
-// ── 时间APP Detail ─────────────────────────────────────────────────────────────
+// ── 时域 Detail ────────────────────────────────────────────────────────────────
 function TimeAppDetail({ onBack, onOpenProject }: { onBack: () => void; onOpenProject: (id: string) => void }) {
   return (
     <div style={{ background: C.bg, minHeight: "100vh", fontFamily: "'Noto Sans SC', 'Inter', sans-serif" }}>
@@ -899,8 +900,8 @@ function TimeAppDetail({ onBack, onOpenProject }: { onBack: () => void; onOpenPr
         <Reveal>
           <div style={{ background: "rgba(255,255,255,0.9)", borderRadius: 24, padding: "30px 36px", border: `1px solid ${C.border}`, boxShadow: "0 24px 80px rgba(15,23,42,0.08)", marginBottom: 56 }}>
             <div style={{ marginBottom: 14 }}>
-              <div style={{ fontSize: 12, textTransform: "uppercase", letterSpacing: "0.18em", color: "#8B5CF6", fontWeight: 700, marginBottom: 10 }}>时间 APP</div>
-              <div style={{ fontSize: "clamp(28px, 4vw, 48px)", fontWeight: 800, color: C.text, lineHeight: 1.05, marginBottom: 12 }}>个人时间资产管理工具</div>
+              <div style={{ fontSize: 12, textTransform: "uppercase", letterSpacing: "0.18em", color: "#8B5CF6", fontWeight: 700, marginBottom: 10 }}>时域</div>
+              <div style={{ fontSize: "clamp(28px, 4vw, 48px)", fontWeight: 800, color: C.text, lineHeight: 1.05, marginBottom: 12 }}>时域 · 个人时间资产管理工具</div>
               <div style={{ fontSize: 15, color: C.muted, maxWidth: 760, lineHeight: 1.8 }}>
                 这个项目把时间从“日历格子”转为“个人资产”，帮助用户看见自己的时间分配并形成更清晰的使用路径。
               </div>
@@ -916,7 +917,7 @@ function TimeAppDetail({ onBack, onOpenProject }: { onBack: () => void; onOpenPr
 
         <Reveal>
           <div style={{ borderRadius: 20, overflow: "hidden", border: `1px solid ${C.border}`, boxShadow: "0 16px 60px rgba(0,0,0,0.08)", marginBottom: 64 }}>
-            <ImageWithFallback src={timeAppImg} alt="时间 APP — 个人时间资产管理界面" className="w-full" style={{ objectFit: "cover", objectPosition: "top" }} />
+            <ImageWithFallback src="/时域.png" alt="时域 — 个人时间资产管理产品设计详情" className="w-full" style={{ objectFit: "contain", objectPosition: "top", display: "block" }} />
           </div>
         </Reveal>
 
